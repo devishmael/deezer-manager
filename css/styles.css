@@ -1,0 +1,21 @@
+/* La animación que hace girar el círculo 360 grados */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* El círculo del spinner */
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255, 255, 255, 0.3); /* Círculo de fondo translúcido */
+    border-top: 3px solid #ffffff;              /* La parte blanca que va a girar */
+    border-radius: 50%;                         /* Lo hace redondo */
+    animation: spin 0.8s linear infinite;       /* Aplica la animación continua */
+    display: inline-block;
+}
+
+/* Clase utilitaria para ocultarlo por defecto */
+.hidden {
+    display: none !important;
+}
