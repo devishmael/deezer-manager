@@ -4,6 +4,9 @@
     100% { transform: rotate(360deg); }
 }
 
+.form-group label {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
 /* El círculo del spinner */
 .spinner {
     width: 18px;
@@ -19,3 +22,526 @@
 .hidden {
     display: none !important;
 }
+
+
+/* ----------------------------------- */
+/* ---- Estetica para el initAuth ---- */
+/* ----------------------------------- */
+
+:root {
+    background-color: #121216;
+  --dz-bg-main: #121216;
+  --dz-bg-card: #191922;
+  --dz-bg-input: #23232d;
+  --dz-border-input: #32323d;
+  --dz-purple: #a238ff;
+  --dz-pink: #ef5466;
+  --dz-gradient: linear-gradient(135deg, #a238ff 0%, #ef5466 100%);
+  --dz-text-primary: #ffffff;
+  --dz-text-secondary: #a2a2ad;
+  --dz-error: #ff4d4d;
+  --dz-radius: 12px;
+}
+
+/* Contenedor Centrado */
+.auth-wrapper {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Tarjeta Principal */
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  background-color: var(--dz-bg-card);
+  padding: 40px 30px;
+  border-radius: var(--dz-radius);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.auth-brand h2 {
+  color: var(--dz-text-primary);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* Formulario y Campos */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: left;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  color: var(--dz-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--dz-bg-input);
+  border: 1px solid var(--dz-border-input);
+  border-radius: 8px;
+  color: var(--dz-text-primary);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.form-control::placeholder {
+  color: #62626d;
+}
+
+.form-control:focus {
+  border-color: var(--dz-purple);
+  box-shadow: 0 0 0 3px rgba(162, 56, 255, 0.25);
+}
+
+/* Botones */
+.btn-primary {
+  width: 100%;
+  padding: 13px;
+  background: var(--dz-gradient);
+  color: var(--dz-text-primary);
+  border: none;
+  border-radius: 25px; /* Bordes redondeados tipo Deezer */
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.15 ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  margin-top: 8px;
+}
+
+.btn-primary:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(162, 56, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 11px;
+  background: transparent;
+  color: var(--dz-text-secondary);
+  border: 1px solid var(--dz-border-input);
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 6px;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--dz-text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Mensajes de Error */
+.auth-error {
+  color: var(--dz-error);
+  background-color: rgba(255, 77, 77, 0.1);
+  border: 1px solid rgba(255, 77, 77, 0.2);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Spinner animado */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------------------------------------------- */
+/* ---- Estetica para el initAuth hasta aqui ---- */
+/* ---------------------------------------------- */
+
+
+/* ------------------------------------ */
+/* ---- Estetica para el initRegis ---- */
+/* ------------------------------------ */
+
+/* Mensaje de Éxito (Verde Deezer) */
+.auth-success {
+  color: #2ed573;
+  background-color: rgba(46, 213, 115, 0.1);
+  border: 1px solid rgba(46, 213, 115, 0.2);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 16px;
+  text-align: center;
+}
+
+/* Subtítulo decorativo para la tarjeta */
+.auth-subtitle {
+  color: var(--dz-text-secondary);
+  font-size: 0.9rem;
+  margin-top: -15px;
+  margin-bottom: 20px;
+}
+
+
+/* ---------------------------------------------- */
+/* ---- Estetica para el initRegis hasta aqui --- */
+/* ---------------------------------------------- */
+
+/* ----------------------------------------------
+   --------- Estetica para el DashBoard ---------
+   ----------------------------------------------*/
+
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background-color: #0f0f13;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-left .logo-title {
+  color: var(--dz-text-primary, #ffffff);
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.5px;
+  background: var(--dz-gradient, linear-gradient(135deg, #a238ff, #ef5466));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Buscador Central */
+.header-center {
+  flex: 0 1 450px;
+}
+
+.search-bar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  color: #a2a2ad;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  background-color: #23232d;
+  border: 1px solid #32323d;
+  border-radius: 25px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: #a238ff;
+  background-color: #2a2a36;
+  box-shadow: 0 0 0 3px rgba(162, 56, 255, 0.2);
+}
+
+/* Perfil de Usuario */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #191922;
+  border: 1px solid #32323d;
+  padding: 6px 14px 6px 6px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-profile-btn:hover {
+  background-color: #23232d;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #a238ff, #ef5466);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.user-name {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+/* ==========================================
+   CONTENIDO DEL DASHBOARD Y CARRUSELES
+   ========================================== */
+.dashboard-content {
+  padding: 30px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-container {
+  margin-bottom: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.see-all-btn {
+  color: #a2a2ad;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.see-all-btn:hover {
+  color: #ffffff;
+}
+
+/* Contenedor Horizontal Desplazable (Carrusel) */
+.carousel-wrapper {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 12px;
+  /* Oculta la barra de scroll en navegadores modernos */
+  scrollbar-width: thin;
+  scrollbar-color: #32323d transparent;
+}
+
+.carousel-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.carousel-wrapper::-webkit-scrollbar-thumb {
+  background-color: #32323d;
+  border-radius: 10px;
+}
+
+/* Tarjeta de Canción / Álbum */
+.media-card {
+  flex: 0 0 170px;
+  background-color: #18181f;
+  padding: 14px;
+  border-radius: 10px;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+  cursor: pointer;
+}
+
+.media-card:hover {
+  background-color: #23232d;
+  transform: translateY(-4px);
+}
+
+.card-img-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.card-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-hover-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 42px;
+  height: 42px;
+  background-color: #ef5466;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.25s ease;
+}
+
+.media-card:hover .play-hover-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-title {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-artist {
+  color: #a2a2ad;
+  font-size: 0.82rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.explicit-tag {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+/* Tarjeta de Artista Popular (Circular) */
+.artist-card {
+  flex: 0 0 160px;
+  text-align: center;
+  background-color: #18181f;
+  padding: 16px 12px;
+  border-radius: 10px;
+  transition: background-color 0.25s ease;
+  cursor: pointer;
+}
+
+.artist-card:hover {
+  background-color: #23232d;
+}
+
+.artist-img-container {
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 12px auto;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.artist-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artist-name {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.artist-label {
+  color: #a2a2ad;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* ----------------------------------------------
+   ---- Estetica para el DashBoard hasta aqui ---
+   ----------------------------------------------*/
