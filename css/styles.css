@@ -288,10 +288,10 @@ body {
 .search-input {
   width: 100%;
   padding: 10px 16px 10px 40px;
-  background-color: #23232d;
-  border: 1px solid #32323d;
+  background-color: var(--dz-bg-input);
+  border: 1px solid var(--dz-border-input);
   border-radius: 25px;
-  color: #ffffff;
+  color: var(--dz-text-primary);
   font-size: 0.9rem;
   outline: none;
   transition: all 0.2s ease;
@@ -362,7 +362,7 @@ body {
 }
 
 .user-name {
-  color: #ffffff;
+  color: var(--dz-text-primary);
   font-weight: 600;
   font-size: 0.88rem;
 }
@@ -388,7 +388,7 @@ body {
 }
 
 .section-header h2 {
-  color: #ffffff;
+  color: var(--dz-text-primary);
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
@@ -403,7 +403,7 @@ body {
 }
 
 .see-all-btn:hover {
-  color: #ffffff;
+  color: var(--dz-text-primary);
 }
 
 /* Contenedor Horizontal Desplazable (Carrusel) */
@@ -483,7 +483,7 @@ body {
 }
 
 .card-title {
-  color: #ffffff;
+  color: var(--dz-text-primary);
   font-size: 0.95rem;
   font-weight: 700;
   margin: 0 0 6px 0;
@@ -493,7 +493,7 @@ body {
 }
 
 .card-artist {
-  color: #a2a2ad;
+  color: var(--dz-text-secondary);
   font-size: 0.82rem;
   margin: 0;
   white-space: nowrap;
@@ -505,8 +505,8 @@ body {
 }
 
 .explicit-tag {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background-color: var(--dz-border-input);
+  color: var(--dz-text-primary);
   font-size: 0.65rem;
   font-weight: 700;
   padding: 1px 4px;
@@ -546,14 +546,14 @@ body {
 }
 
 .artist-name {
-  color: #ffffff;
+  color: var(--dz-text-primary);
   font-size: 0.95rem;
   font-weight: 700;
   margin: 0 0 4px 0;
 }
 
 .artist-label {
-  color: #a2a2ad;
+  color: var(--dz-text-secondary);
   font-size: 0.8rem;
   margin: 0;
 }
