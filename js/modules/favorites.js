@@ -49,9 +49,9 @@ export function renderFavoritesPanel() {
         <div class="section-header">
             <h2>Mis Favoritos</h2>
         </div>
-        <div class="carousel-wrapper" id="favorites-carousel">
+        <div class="favorites-list-wrapper">
             ${favorites.length === 0 ? `
-                <p style="color: #a2a2ad; padding: 20px;">No tienes canciones favoritas guardadas.</p>
+                <p style="color: var(--dz-text-secondary); text-align: center; padding: 20px 0;">No tienes canciones favoritas guardadas.</p>
             ` : favorites.map(track => {
                 const userRating = getAlbumRating(track.id);
                 
@@ -61,16 +61,20 @@ export function renderFavoritesPanel() {
                 }
 
                 return `
-                    <div class="media-card" data-id="${track.id}">
-                        <div class="card-img-container">
-                            <img src="${track.cover}" alt="${track.title}">
-                            <button class="heart-btn is-active" data-id="${track.id}">♥</button>
-                            <div class="play-hover-btn">▶</div>
+                    <div class="fav-track-row" data-id="${track.id}">
+                        <div class="fav-track-left">
+                            <button class="fav-row-play-btn" title="Reproducir">▶</button>
+                            <img src="${track.cover}" alt="${track.title}" class="fav-track-cover">
+                            <div class="fav-track-details">
+                                <span class="fav-track-title">${track.title}</span>
+                                <span class="fav-track-artist">${track.artist}</span>
+                            </div>
                         </div>
-                        <h3 class="card-title">${track.title}</h3>
-                        <p class="card-artist">${track.artist}</p>
-                        <div class="stars-container" data-id="${track.id}">
-                            ${starsHTML}
+                        <div class="fav-track-right">
+                            <div class="stars-container" data-id="${track.id}">
+                                ${starsHTML}
+                            </div>
+                            <button class="fav-row-heart-btn" data-id="${track.id}" title="Quitar de Favoritos">♥</button>
                         </div>
                     </div>
                 `;
@@ -78,8 +82,8 @@ export function renderFavoritesPanel() {
         </div>
     `;
 
-    // Asignar eventos a los corazones
-    container.querySelectorAll('.heart-btn').forEach(btn => {
+    // Asignar eventos a los corazones (quitar de favoritos)
+    container.querySelectorAll('.fav-row-heart-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const trackId = btn.getAttribute('data-id');
@@ -98,11 +102,11 @@ export function renderFavoritesPanel() {
         });
     });
 
-    // Asignar eventos de reproducción a las tarjetas de favoritos
-    container.querySelectorAll('.play-hover-btn').forEach(btn => {
+    // Asignar eventos de reproducción a las filas
+    container.querySelectorAll('.fav-row-play-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const trackId = btn.closest('.media-card').getAttribute('data-id');
+            const trackId = btn.closest('.fav-track-row').getAttribute('data-id');
             const trackData = favorites.find(t => String(t.id) === String(trackId));
             if (trackData && trackData.preview) {
                 window.playTrack(trackData.preview);
