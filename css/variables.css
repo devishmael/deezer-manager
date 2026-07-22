@@ -1,0 +1,35 @@
+/* Variables CSS para Tematización Dual */
+:root {
+  /* Variables comunes */
+  --dz-purple: #a238ff;
+  --dz-pink: #ef5466;
+  --dz-gradient: linear-gradient(135deg, #a238ff 0%, #ef5466 100%);
+  --dz-error: #ff4d4d;
+  --dz-radius: 12px;
+
+  /* Modo Oscuro (Por defecto) */
+  --dz-bg-main: #121216;
+  --dz-bg-card: #191922;
+  --dz-bg-input: #23232d;
+  --dz-border-input: #32323d;
+  --dz-text-primary: #ffffff;
+  --dz-text-secondary: #a2a2ad;
+  --dz-header-bg: #0f0f13;
+  --dz-shadow: rgba(0, 0, 0, 0.6);
+  --dz-card-hover: #23232d;
+  --dz-btn-hover: rgba(255, 255, 255, 0.05);
+}
+
+/* Modo Claro */
+body.light-mode {
+  --dz-bg-main: #f4f4f7;
+  --dz-bg-card: #ffffff;
+  --dz-bg-input: #ffffff;
+  --dz-border-input: #d2d2d9;
+  --dz-text-primary: #121216;
+  --dz-text-secondary: #62626d;
+  --dz-header-bg: #ffffff;
+  --dz-shadow: rgba(0, 0, 0, 0.08);
+  --dz-card-hover: #eaeaea;
+  --dz-btn-hover: rgba(0, 0, 0, 0.05);
+}

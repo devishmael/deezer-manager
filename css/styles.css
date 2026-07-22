@@ -28,20 +28,14 @@
 /* ---- Estetica para el initAuth ---- */
 /* ----------------------------------- */
 
-:root {
-    background-color: #121216;
-  --dz-bg-main: #121216;
-  --dz-bg-card: #191922;
-  --dz-bg-input: #23232d;
-  --dz-border-input: #32323d;
-  --dz-purple: #a238ff;
-  --dz-pink: #ef5466;
-  --dz-gradient: linear-gradient(135deg, #a238ff 0%, #ef5466 100%);
-  --dz-text-primary: #ffffff;
-  --dz-text-secondary: #a2a2ad;
-  --dz-error: #ff4d4d;
-  --dz-radius: 12px;
+body {
+  background-color: var(--dz-bg-main);
+  color: var(--dz-text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 
 /* Contenedor Centrado */
 .auth-wrapper {
@@ -248,17 +242,17 @@
    --------- Estetica para el DashBoard ---------
    ----------------------------------------------*/
 
-
 .main-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px 32px;
-  background-color: #0f0f13;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: var(--dz-header-bg);
+  border-bottom: 1px solid var(--dz-border-input);
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: background-color 0.3s ease, border-bottom 0.3s ease;
 }
 
 .header-left .logo-title {
@@ -320,8 +314,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: #191922;
-  border: 1px solid #32323d;
+  background-color: var(--dz-bg-card);
+  border: 1px solid var(--dz-border-input);
   padding: 6px 14px 6px 6px;
   border-radius: 30px;
   cursor: pointer;
@@ -329,8 +323,28 @@
 }
 
 .user-profile-btn:hover {
-  background-color: #23232d;
+  background-color: var(--dz-card-hover);
   border-color: rgba(255, 255, 255, 0.2);
+}
+
+.theme-toggle-btn {
+  background: var(--dz-bg-card);
+  border: 1px solid var(--dz-border-input);
+  color: var(--dz-text-primary);
+  font-size: 1.1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--dz-card-hover);
+  transform: scale(1.05);
 }
 
 .user-avatar {
@@ -416,15 +430,16 @@
 /* Tarjeta de Canción / Álbum */
 .media-card {
   flex: 0 0 170px;
-  background-color: #18181f;
+  background-color: var(--dz-bg-card);
   padding: 14px;
   border-radius: 10px;
-  transition: background-color 0.25s ease, transform 0.25s ease;
+  border: 1px solid var(--dz-border-input);
+  transition: background-color 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
   cursor: pointer;
 }
 
 .media-card:hover {
-  background-color: #23232d;
+  background-color: var(--dz-card-hover);
   transform: translateY(-4px);
 }
 
@@ -503,15 +518,16 @@
 .artist-card {
   flex: 0 0 160px;
   text-align: center;
-  background-color: #18181f;
+  background-color: var(--dz-bg-card);
   padding: 16px 12px;
   border-radius: 10px;
-  transition: background-color 0.25s ease;
+  border: 1px solid var(--dz-border-input);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
   cursor: pointer;
 }
 
 .artist-card:hover {
-  background-color: #23232d;
+  background-color: var(--dz-card-hover);
 }
 
 .artist-img-container {
@@ -545,3 +561,314 @@
 /* ----------------------------------------------
    ---- Estetica para el DashBoard hasta aqui ---
    ----------------------------------------------*/
+
+.network-alert-banner {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--dz-bg-card);
+  border: 1px solid var(--dz-border-input);
+  color: var(--dz-text-primary);
+  padding: 12px 24px;
+  border-radius: 8px;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  font-size: 0.9rem;
+  font-weight: 600;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Corazón e Iconos de Favoritos */
+.heart-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: #ffffff;
+  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.heart-btn:hover {
+  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.heart-btn.is-active {
+  color: var(--dz-pink);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Calificaciones con estrellas */
+.stars-container {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.star-rating {
+  font-size: 1.1rem;
+  color: #4a4a5a;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.star-rating:hover,
+.star-rating.active {
+  color: #ffcc00;
+}
+
+/* Modal de Perfil */
+.profile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(10, 10, 12, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.profile-modal {
+  width: 100%;
+  max-width: 550px;
+  background-color: var(--dz-bg-card);
+  border: 1px solid var(--dz-border-input);
+  border-radius: var(--dz-radius);
+  padding: 30px;
+  box-shadow: 0 20px 40px var(--dz-shadow);
+  color: var(--dz-text-primary);
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.close-profile-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: var(--dz-text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-profile-btn:hover {
+  color: var(--dz-text-primary);
+}
+
+.profile-header-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--dz-border-input);
+  padding-bottom: 24px;
+}
+
+.profile-avatar-large {
+  width: 90px;
+  height: 90px;
+  background: var(--dz-gradient);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 24px rgba(162, 56, 255, 0.3);
+}
+
+.profile-name-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.profile-username {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.edit-name-input {
+  background-color: var(--dz-bg-input);
+  border: 1px solid var(--dz-border-input);
+  color: var(--dz-text-primary);
+  font-size: 1.3rem;
+  padding: 4px 12px;
+  border-radius: 6px;
+  width: 200px;
+  outline: none;
+  font-weight: 700;
+}
+
+.edit-profile-btn,
+.save-profile-btn {
+  background: transparent;
+  border: none;
+  color: var(--dz-text-secondary);
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+
+.edit-profile-btn:hover,
+.save-profile-btn:hover {
+  color: var(--dz-purple);
+}
+
+.profile-role {
+  color: var(--dz-text-secondary);
+  font-size: 0.9rem;
+  margin: 0 0 16px 0;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 30px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--dz-purple);
+}
+
+.stat-lbl {
+  font-size: 0.8rem;
+  color: var(--dz-text-secondary);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Lista de favoritos en perfil */
+.profile-favs-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+}
+
+.profile-favs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-fav-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: var(--dz-bg-input);
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--dz-border-input);
+}
+
+.profile-fav-cover {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.profile-fav-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-fav-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.profile-fav-artist {
+  font-size: 0.82rem;
+  color: var(--dz-text-secondary);
+  margin-top: 2px;
+}
+
+.profile-fav-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.profile-play-btn {
+  background: var(--dz-gradient);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(162, 56, 255, 0.3);
+}
+
+.profile-remove-btn {
+  background: transparent;
+  border: 1px solid var(--dz-border-input);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--dz-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-remove-btn:hover {
+  border-color: var(--dz-error);
+  color: var(--dz-error);
+}
+
+

@@ -1,11 +1,17 @@
 import { initAuth, checkSession, logout } from './modules/auth.js';
 import { initSearch } from './modules/search.js';
-import { initFavorites } from './modules/favorites.js';
-import { initOfflineHandler } from './storage.js';
+import { initFavorites, isFavorite, toggleFavorite, renderFavoritesPanel } from './modules/favorites.js';
+import { initOfflineHandler, saveAlbumRating, getAlbumRating } from './storage.js';
 import { buscarCanciones, buscarArtista, obtenerTop } from './api.js';
 import { renderProfile } from './modules/profile.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Aplicar tema guardado
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+    }
+    
     initOfflineHandler();
 
     if (checkSession()) {
@@ -39,6 +45,7 @@ export function renderDashboard() {
             </div>
 
             <div class="header-right">
+                <button id="theme-toggle-btn" class="theme-toggle-btn" title="Cambiar Tema">🌙</button>
                 <div class="user-profile-btn" id="user-profile-btn" title="Ver Perfil">
                     <div class="user-avatar">${inicialUsuario}</div>
                     <span class="user-name">${usuarioActual}</span>
@@ -79,9 +86,20 @@ export function renderDashboard() {
     
     initSearch();
     initFavorites();
+
+    // Lógica selector de tema
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    if (themeBtn) {
+        themeBtn.textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            themeBtn.textContent = isLight ? '☀️' : '🌙';
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
+    }
     
     document.getElementById('user-profile-btn').addEventListener('click', () => {
-        //alert(`Perfil de: ${usuarioActual}`);
         renderProfile();
     });
 
@@ -91,6 +109,45 @@ export function renderDashboard() {
 
     cargarHomeData();
 }
+
+// Definición global para reproducción de audio
+window.playTrack = (url) => {
+    if (!url) {
+        alert('Este track no tiene demo de audio disponible.');
+        return;
+    }
+    let audio = document.getElementById('global-audio-player');
+    if (!audio) {
+        audio = document.createElement('audio');
+        audio.id = 'global-audio-player';
+        audio.style.display = 'none';
+        document.body.appendChild(audio);
+    }
+    audio.src = url;
+    audio.play().catch(err => console.log('Error al reproducir audio:', err));
+    
+    let playerNotification = document.getElementById('player-notification');
+    if (!playerNotification) {
+        playerNotification = document.createElement('div');
+        playerNotification.id = 'player-notification';
+        playerNotification.className = 'network-alert-banner'; // Reusamos el diseño flotante bonito
+        playerNotification.style.left = '20px';
+        playerNotification.style.right = 'auto';
+        document.body.appendChild(playerNotification);
+    }
+    playerNotification.innerHTML = `
+        <div style="display:flex; align-items:center; gap:10px;">
+            <span>🔊 Reproduciendo demo...</span>
+            <button id="pause-demo-btn" class="btn-primary" style="padding: 4px 10px; margin: 0; font-size: 0.8rem; width: auto;">Pausar</button>
+        </div>
+    `;
+    playerNotification.style.display = 'block';
+
+    document.getElementById('pause-demo-btn').addEventListener('click', () => {
+        audio.pause();
+        playerNotification.style.display = 'none';
+    });
+};
 
 async function cargarHomeData() {
     const songsCarousel = document.getElementById('songs-carousel');
@@ -109,19 +166,89 @@ async function cargarHomeData() {
         if (canciones.length === 0) {
             songsCarousel.innerHTML = '<p style="color: #a2a2ad;">No hay canciones disponibles.</p>';
         } else {
-            songsCarousel.innerHTML = canciones.map(track => `
-                <div class="media-card" data-id="${track.id}">
-                    <div class="card-img-container">
-                        <img src="${track.album.cover_medium}" alt="${track.title}">
-                        <div class="play-hover-btn">▶</div>
+            songsCarousel.innerHTML = canciones.map(track => {
+                const favActive = isFavorite(track.id) ? 'is-active' : '';
+                const favText = isFavorite(track.id) ? '♥' : '♡';
+                const userRating = getAlbumRating(track.id);
+
+                let starsHTML = '';
+                for (let i = 1; i <= 5; i++) {
+                    starsHTML += `<span class="star-rating ${i <= userRating ? 'active' : ''}" data-value="${i}">★</span>`;
+                }
+
+                return `
+                    <div class="media-card" data-id="${track.id}">
+                        <div class="card-img-container">
+                            <img src="${track.album.cover_medium}" alt="${track.title}">
+                            <button class="heart-btn ${favActive}" data-id="${track.id}">
+                                ${favText}
+                            </button>
+                            <div class="play-hover-btn">▶</div>
+                        </div>
+                        <h3 class="card-title">${track.title_short || track.title}</h3>
+                        <p class="card-artist">
+                            ${track.explicit_lyrics ? '<span class="explicit-tag">E</span>' : ''}
+                            ${track.artist.name}
+                        </p>
+                        <div class="stars-container" data-id="${track.id}">
+                            ${starsHTML}
+                        </div>
                     </div>
-                    <h3 class="card-title">${track.title_short || track.title}</h3>
-                    <p class="card-artist">
-                        ${track.explicit_lyrics ? '<span class="explicit-tag">E</span>' : ''}
-                        ${track.artist.name}
-                    </p>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+
+            // Asignar eventos de favoritos a los corazones
+            songsCarousel.querySelectorAll('.heart-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const trackId = btn.getAttribute('data-id');
+                    const trackData = canciones.find(t => String(t.id) === String(trackId));
+                    if (trackData) {
+                        const newFav = {
+                            id: trackData.id,
+                            title: trackData.title,
+                            artist: trackData.artist.name,
+                            cover: trackData.album.cover_medium,
+                            preview: trackData.preview
+                        };
+                        const active = toggleFavorite(newFav);
+                        btn.classList.toggle('is-active', active);
+                        btn.innerHTML = active ? '♥' : '♡';
+                        renderFavoritesPanel();
+                    }
+                });
+            });
+
+            // Asignar eventos de reproducción a las tarjetas
+            songsCarousel.querySelectorAll('.play-hover-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const trackId = btn.closest('.media-card').getAttribute('data-id');
+                    const trackData = canciones.find(t => String(t.id) === String(trackId));
+                    if (trackData && trackData.preview) {
+                        window.playTrack(trackData.preview);
+                    }
+                });
+            });
+
+            // Asignar eventos de calificación (estrellas)
+            songsCarousel.querySelectorAll('.star-rating').forEach(star => {
+                star.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const rating = parseInt(star.getAttribute('data-value'));
+                    const trackId = star.parentElement.getAttribute('data-id');
+                    
+                    // Guardar calificación
+                    saveAlbumRating(trackId, rating);
+
+                    // Actualizar UI
+                    const siblings = star.parentElement.querySelectorAll('.star-rating');
+                    siblings.forEach(sib => {
+                        const val = parseInt(sib.getAttribute('data-value'));
+                        sib.classList.toggle('active', val <= rating);
+                    });
+                });
+            });
         }
     }
 

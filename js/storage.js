@@ -90,5 +90,27 @@ async function sendRatingToServer(albumId, rating) {
  */
 function showNetworkStatusNotification(isOnline) {
     console.log(isOnline ? "🟢 Volvió el internet!" : "🔴 Te quedaste sin conexión.");
-    // Aquí podrías crear un pequeño div flotante en el HTML si quieres lucirte con el profe
+    
+    // Crear notificación visual bonita en pantalla
+    let alertDiv = document.getElementById('network-alert');
+    if (!alertDiv) {
+        alertDiv = document.createElement('div');
+        alertDiv.id = 'network-alert';
+        alertDiv.className = 'network-alert-banner';
+        document.body.appendChild(alertDiv);
+    }
+    alertDiv.textContent = isOnline ? "🟢 Conectado: Sincronizando cambios..." : "🔴 Modo sin conexión: Tus cambios se guardarán localmente";
+    alertDiv.style.display = 'block';
+    
+    setTimeout(() => {
+        alertDiv.style.display = 'none';
+    }, 4000);
 }
+
+/**
+ * Obtiene la calificación de un álbum guardada localmente
+ */
+export function getAlbumRating(albumId) {
+    const ratings = JSON.parse(localStorage.getItem('album_ratings')) || {};
+    return ratings[albumId] || 0;
+}
