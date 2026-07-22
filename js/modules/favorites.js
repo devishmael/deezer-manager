@@ -1,10 +1,9 @@
-// Módulo de Favoritos - Gestión local y vinculación de UI
+import { getAlbumRating, saveAlbumRating } from '../storage.js';
 
 export function initFavorites() {
     const container = document.getElementById('favorites-section');
     if (!container) return;
 
-    // Inicialización del panel de favoritos en el dashboard si es necesario
     renderFavoritesPanel();
 }
 
@@ -19,12 +18,10 @@ export function toggleFavorite(track) {
     const index = favorites.findIndex(item => String(item.id) === String(track.id));
 
     if (index !== -1) {
-        // Eliminar
         favorites.splice(index, 1);
         localStorage.setItem(`favorites_${usuarioActual}`, JSON.stringify(favorites));
-        return false; // Ya no es favorito
+        return false;
     } else {
-        // Agregar
         favorites.push({
             id: track.id,
             title: track.title,
@@ -33,7 +30,7 @@ export function toggleFavorite(track) {
             preview: track.preview
         });
         localStorage.setItem(`favorites_${usuarioActual}`, JSON.stringify(favorites));
-        return true; // Ahora es favorito
+        return true;
     }
 }
 
@@ -49,43 +46,94 @@ export function renderFavoritesPanel() {
     const favorites = getFavorites();
 
     container.innerHTML = `
-        <div class="favorites-panel-header">
+        <div class="section-header">
             <h2>Mis Favoritos</h2>
         </div>
-        <div class="favorites-list-container">
+        <div class="carousel-wrapper" id="favorites-carousel">
             ${favorites.length === 0 ? `
-                <p class="empty-msg">No tienes canciones favoritas guardadas.</p>
-            ` : favorites.map(track => `
-                <div class="fav-item" data-id="${track.id}">
-                    <img src="${track.cover}" alt="${track.title}" class="fav-cover">
-                    <div class="fav-info">
-                        <span class="fav-title">${track.title}</span>
-                        <span class="fav-artist">${track.artist}</span>
+                <p style="color: #a2a2ad; padding: 20px;">No tienes canciones favoritas guardadas.</p>
+            ` : favorites.map(track => {
+                const userRating = getAlbumRating(track.id);
+                
+                let starsHTML = '';
+                for (let i = 1; i <= 5; i++) {
+                    starsHTML += `<span class="star-rating ${i <= userRating ? 'active' : ''}" data-value="${i}">★</span>`;
+                }
+
+                return `
+                    <div class="media-card" data-id="${track.id}">
+                        <div class="card-img-container">
+                            <img src="${track.cover}" alt="${track.title}">
+                            <button class="heart-btn is-active" data-id="${track.id}">♥</button>
+                            <div class="play-hover-btn">▶</div>
+                        </div>
+                        <h3 class="card-title">${track.title}</h3>
+                        <p class="card-artist">${track.artist}</p>
+                        <div class="stars-container" data-id="${track.id}">
+                            ${starsHTML}
+                        </div>
                     </div>
-                    <div class="fav-actions">
-                        <button class="play-fav-btn" onclick="window.playTrack('${track.preview}')">▶</button>
-                        <button class="remove-fav-btn" data-id="${track.id}">✕</button>
-                    </div>
-                </div>
-            `).join('')}
+                `;
+            }).join('')}
         </div>
     `;
 
-    // Asignar listeners
-    container.querySelectorAll('.remove-fav-btn').forEach(btn => {
+    // Asignar eventos a los corazones
+    container.querySelectorAll('.heart-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const id = btn.getAttribute('data-id');
-            const item = favorites.find(f => String(f.id) === String(id));
-            if (item) {
-                toggleFavorite(item);
+            const trackId = btn.getAttribute('data-id');
+            const trackData = favorites.find(t => String(t.id) === String(trackId));
+            if (trackData) {
+                toggleFavorite(trackData);
                 renderFavoritesPanel();
-                // Actualizar corazones en el dashboard
-                const heart = document.querySelector(`.heart-btn[data-id="${id}"]`);
-                if (heart) {
-                    heart.classList.remove('is-active');
-                    heart.innerHTML = '♡';
+
+                // Actualizar corazones en el home (si existen)
+                const homeHeart = document.querySelector(`.heart-btn[data-id="${trackId}"]`);
+                if (homeHeart) {
+                    homeHeart.classList.remove('is-active');
+                    homeHeart.innerHTML = '♡';
                 }
+            }
+        });
+    });
+
+    // Asignar eventos de reproducción a las tarjetas de favoritos
+    container.querySelectorAll('.play-hover-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const trackId = btn.closest('.media-card').getAttribute('data-id');
+            const trackData = favorites.find(t => String(t.id) === String(trackId));
+            if (trackData && trackData.preview) {
+                window.playTrack(trackData.preview);
+            }
+        });
+    });
+
+    // Asignar eventos de calificación (estrellas)
+    container.querySelectorAll('.star-rating').forEach(star => {
+        star.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const rating = parseInt(star.getAttribute('data-value'));
+            const trackId = star.parentElement.getAttribute('data-id');
+            
+            // Guardar calificación
+            saveAlbumRating(trackId, rating);
+
+            // Actualizar UI en favoritos
+            const siblings = star.parentElement.querySelectorAll('.star-rating');
+            siblings.forEach(sib => {
+                const val = parseInt(sib.getAttribute('data-value'));
+                sib.classList.toggle('active', val <= rating);
+            });
+
+            // Actualizar UI en home (si existe)
+            const homeStars = document.querySelector(`.stars-container[data-id="${trackId}"]`);
+            if (homeStars) {
+                homeStars.querySelectorAll('.star-rating').forEach(sib => {
+                    const val = parseInt(sib.getAttribute('data-value'));
+                    sib.classList.toggle('active', val <= rating);
+                });
             }
         });
     });
