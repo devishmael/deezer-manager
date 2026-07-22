@@ -113,7 +113,7 @@ async function cargarHomeData() {
                 <div class="media-card" data-id="${track.id}">
                     <div class="card-img-container">
                         <img src="${track.album.cover_medium}" alt="${track.title}">
-                        <div class="play-hover-btn">▶</div>
+                        <button class="play-hover-btn">▶</button>
                     </div>
                     <h3 class="card-title">${track.title_short || track.title}</h3>
                     <p class="card-artist">
@@ -141,4 +141,21 @@ async function cargarHomeData() {
             `).join('');
         }
     }
+
+    // ---- DELEGACIÓN DE EVENTOS EN EL CARRUSEL DE CANCIONES ----
+    songsCarousel.addEventListener('click', (e) => {
+        const playBtn = e.target.closest('.play-hover-btn');
+
+        if (playBtn) {
+            const card = playBtn.closest('.media-card');
+            const songId = card.dataset.id;
+
+            console.log("Abriendo reproductor para la canción ID:", songId);
+            initReproduction(card.card.canción);
+        }
+    });
+}
+
+async function initReproduction(canción) {
+    console.log("Reproduciendo " + canción);
 }
