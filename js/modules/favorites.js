@@ -41,7 +41,6 @@ export function isFavorite(trackId) {
     return favorites.some(item => String(item.id) === String(trackId));
 }
 
-
 export function renderFavoritesPanel() {
     const container = document.getElementById('favorites-section');
     if (!container) return;
@@ -75,9 +74,8 @@ export function renderFavoritesPanel() {
                 let starsHTML = '';
                 for (let i = 1; i <= 5; i++) {
                     starsHTML += `<span class="star-rating ${i <= userRating ? 'active' : ''}" data-value="${i}">★</span>`;
-                }    
+                }
 
-                
                 return `
                     <div class="fav-track-row" data-id="${track.id}">
                         <div class="fav-track-left">
@@ -100,7 +98,7 @@ export function renderFavoritesPanel() {
         </div>
     `;
 
-     // Asignar evento al selector de ordenamiento
+    // Asignar evento al selector de ordenamiento
     const sortSelect = container.querySelector('#fav-sort-select');
     if (sortSelect) {
         sortSelect.addEventListener('change', (e) => {
@@ -140,7 +138,7 @@ export function renderFavoritesPanel() {
         });
     });
 
-     // Asignar eventos de calificación (estrellas)
+    // Asignar eventos de calificación (estrellas)
     container.querySelectorAll('.star-rating').forEach(star => {
         star.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -173,203 +171,6 @@ export function renderFavoritesPanel() {
         });
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
