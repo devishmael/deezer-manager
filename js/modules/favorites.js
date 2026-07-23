@@ -1,5 +1,7 @@
 import { getAlbumRating, saveAlbumRating } from '../storage.js';
 
+let currentSortOrder = 'none'; // 'none', 'desc', 'asc'
+
 export function initFavorites() {
     const container = document.getElementById('favorites-section');
     if (!container) return;
@@ -39,15 +41,30 @@ export function isFavorite(trackId) {
     return favorites.some(item => String(item.id) === String(trackId));
 }
 
+
 export function renderFavoritesPanel() {
     const container = document.getElementById('favorites-section');
     if (!container) return;
 
-    const favorites = getFavorites();
+    let favorites = getFavorites();
+
+    // Aplicar ordenamiento dinámico por estrellas
+    if (currentSortOrder === 'desc') {
+        favorites.sort((a, b) => getAlbumRating(b.id) - getAlbumRating(a.id));
+    } else if (currentSortOrder === 'asc') {
+        favorites.sort((a, b) => getAlbumRating(a.id) - getAlbumRating(b.id));
+    }
 
     container.innerHTML = `
-        <div class="section-header">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <h2>Mis Favoritos</h2>
+            <div class="favorites-filters">
+                <select id="fav-sort-select" class="sort-select" title="Ordenar favoritos">
+                    <option value="none" ${currentSortOrder === 'none' ? 'selected' : ''}>Sin ordenar</option>
+                    <option value="desc" ${currentSortOrder === 'desc' ? 'selected' : ''}>Calificación (★ Max → Min)</option>
+                    <option value="asc" ${currentSortOrder === 'asc' ? 'selected' : ''}>Calificación (★ Min → Max)</option>
+                </select>
+            </div>
         </div>
         <div class="favorites-list-wrapper">
             ${favorites.length === 0 ? `
@@ -58,8 +75,9 @@ export function renderFavoritesPanel() {
                 let starsHTML = '';
                 for (let i = 1; i <= 5; i++) {
                     starsHTML += `<span class="star-rating ${i <= userRating ? 'active' : ''}" data-value="${i}">★</span>`;
-                }
+                }    
 
+                
                 return `
                     <div class="fav-track-row" data-id="${track.id}">
                         <div class="fav-track-left">
@@ -81,6 +99,15 @@ export function renderFavoritesPanel() {
             }).join('')}
         </div>
     `;
+
+     // Asignar evento al selector de ordenamiento
+    const sortSelect = container.querySelector('#fav-sort-select');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+            currentSortOrder = e.target.value;
+            renderFavoritesPanel();
+        });
+    }
 
     container.querySelectorAll('.fav-row-heart-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -113,7 +140,7 @@ export function renderFavoritesPanel() {
         });
     });
 
-    // Asignar eventos de calificación (estrellas)
+     // Asignar eventos de calificación (estrellas)
     container.querySelectorAll('.star-rating').forEach(star => {
         star.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -123,14 +150,18 @@ export function renderFavoritesPanel() {
             // Guardar calificación
             saveAlbumRating(trackId, rating);
 
-            // Actualizar UI en favoritos
-            const siblings = star.parentElement.querySelectorAll('.star-rating');
-            siblings.forEach(sib => {
-                const val = parseInt(sib.getAttribute('data-value'));
-                sib.classList.toggle('active', val <= rating);
-            });
+            // Si hay un ordenamiento activo, re-renderizar todo el panel
+            if (currentSortOrder !== 'none') {
+                renderFavoritesPanel();
+            } else {
+                // Si no, actualizar solo la UI local de estrellas para no perder transiciones
+                const siblings = star.parentElement.querySelectorAll('.star-rating');
+                siblings.forEach(sib => {
+                    const val = parseInt(sib.getAttribute('data-value'));
+                    sib.classList.toggle('active', val <= rating);
+                });
+            }
 
-            
             // Actualizar UI en home (si existe)
             const homeStars = document.querySelector(`.stars-container[data-id="${trackId}"]`);
             if (homeStars) {
@@ -139,10 +170,206 @@ export function renderFavoritesPanel() {
                     sib.classList.toggle('active', val <= rating);
                 });
             }
-            
         });
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
