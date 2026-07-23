@@ -969,6 +969,32 @@ body {
   transform: scale(1.2);
 }
 
+/* Selector de Ordenación de Favoritos */
+.sort-select {
+  padding: 8px 16px;
+  background-color: var(--dz-bg-input);
+  border: 1px solid var(--dz-border-input);
+  border-radius: 20px;
+  color: var(--dz-text-primary);
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 5px var(--dz-shadow);
+}
+
+.sort-select:hover {
+  border-color: var(--dz-purple);
+  background-color: var(--dz-card-hover);
+}
+
+.sort-select:focus {
+  border-color: var(--dz-purple);
+  box-shadow: 0 0 0 3px rgba(162, 56, 255, 0.25);
+}
+
+
 #mensaje-sin-busqueda {
   background-color: #2a2a36;
   display: flex;
