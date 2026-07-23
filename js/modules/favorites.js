@@ -139,12 +139,6 @@ export function renderFavoritesPanel() {
                     sib.classList.toggle('active', val <= rating);
                 });
             }
-
-            // Evento para el filtrado dinámico
-filterSelect.addEventListener('change', (e) => {
-    renderAlbums(e.target.value);
-});
-
             
         });
     });
