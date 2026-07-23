@@ -246,7 +246,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 32px;
+  padding: 16px 35px;
   background-color: var(--dz-header-bg);
   border-bottom: 1px solid var(--dz-border-input);
   position: sticky;
@@ -254,6 +254,7 @@ body {
   z-index: 100;
   transition: background-color 0.3s ease, border-bottom 0.3s ease;
 }
+
 
 .header-left .logo-title {
   color: var(--dz-text-primary, #ffffff);
@@ -307,7 +308,8 @@ body {
 .header-right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 3%;
+  padding-left: 2%;
 }
 
 .user-profile-btn {
