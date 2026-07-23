@@ -82,7 +82,6 @@ export function renderFavoritesPanel() {
         </div>
     `;
 
-    // Asignar eventos a los corazones (quitar de favoritos)
     container.querySelectorAll('.fav-row-heart-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();

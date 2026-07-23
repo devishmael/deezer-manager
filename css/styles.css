@@ -969,5 +969,11 @@ body {
   transform: scale(1.2);
 }
 
+#mensaje-sin-busqueda {
+  background-color: #2a2a36;
+  display: flex;
+  text-align: center;
+  align-items: center;
+}
 
-
+

@@ -4,9 +4,10 @@ import { initFavorites, isFavorite, toggleFavorite, renderFavoritesPanel } from 
 import { initOfflineHandler, saveAlbumRating, getAlbumRating } from './storage.js';
 import { buscarCanciones, buscarArtista, obtenerTop } from './api.js';
 import { renderProfile } from './modules/profile.js';
+import { renderArtistDetail } from './modules/artistDetail.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Aplicar tema guardado
+    // ---- Aplicar tema guardado ----
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
         document.body.classList.add('light-mode');
@@ -87,7 +88,6 @@ export function renderDashboard() {
     initSearch();
     initFavorites();
 
-    // Lógica selector de tema
     const themeBtn = document.getElementById('theme-toggle-btn');
     if (themeBtn) {
         themeBtn.textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
@@ -110,7 +110,7 @@ export function renderDashboard() {
     cargarHomeData();
 }
 
-// Definición global para reproducción de audio
+// ---- Para reproducir las canciones ----
 window.playTrack = (url) => {
     if (!url) {
         alert('Este track no tiene demo de audio disponible.');
@@ -130,7 +130,7 @@ window.playTrack = (url) => {
     if (!playerNotification) {
         playerNotification = document.createElement('div');
         playerNotification.id = 'player-notification';
-        playerNotification.className = 'network-alert-banner'; // Reusamos el diseño flotante bonito
+        playerNotification.className = 'network-alert-banner'; 
         playerNotification.style.left = '20px';
         playerNotification.style.right = 'auto';
         document.body.appendChild(playerNotification);
@@ -150,9 +150,11 @@ window.playTrack = (url) => {
 };
 
 async function cargarHomeData() {
+    const app = document.getElementById('app');
     const songsCarousel = document.getElementById('songs-carousel');
     const artistsCarousel = document.getElementById('artists-carousel');
-
+    
+    
     const chartData = await obtenerTop();
 
     if (!chartData) {
@@ -219,7 +221,7 @@ async function cargarHomeData() {
                 });
             });
 
-            // Asignar eventos de reproducción a las tarjetas
+            // ---- Reproducción de las tarjetas ----
             songsCarousel.querySelectorAll('.play-hover-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -231,17 +233,14 @@ async function cargarHomeData() {
                 });
             });
 
-            // Asignar eventos de calificación (estrellas)
             songsCarousel.querySelectorAll('.star-rating').forEach(star => {
                 star.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const rating = parseInt(star.getAttribute('data-value'));
                     const trackId = star.parentElement.getAttribute('data-id');
                     
-                    // Guardar calificación
                     saveAlbumRating(trackId, rating);
 
-                    // Actualizar UI
                     const siblings = star.parentElement.querySelectorAll('.star-rating');
                     siblings.forEach(sib => {
                         const val = parseInt(sib.getAttribute('data-value'));
@@ -267,22 +266,14 @@ async function cargarHomeData() {
                 </div>
             `).join('');
         }
+        artistsCarousel.querySelectorAll('.artist-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const artistId = card.getAttribute('data-id');
+                const artistData = artistas.find(a => String(a.id) === String(artistId));
+                if (artistData) {
+                    renderArtistDetail(artistData);
+                }
+            });
+        });
     }
-
-    // ---- DELEGACIÓN DE EVENTOS EN EL CARRUSEL DE CANCIONES ----
-    songsCarousel.addEventListener('click', (e) => {
-        const playBtn = e.target.closest('.play-hover-btn');
-
-        if (playBtn) {
-            const card = playBtn.closest('.media-card');
-            const songId = card.dataset.id;
-
-            console.log("Abriendo reproductor para la canción ID:", songId);
-            initReproduction(card.card.canción);
-        }
-    });
-}
-
-async function initReproduction(canción) {
-    console.log("Reproduciendo " + canción);
 }

@@ -7,7 +7,6 @@ function pedirJSONP(url) {
     const callbackName = 'deezerCb_' + Math.floor(Math.random() * 1000000);
     const script = document.createElement('script');
 
-    // Callback global temporal
     window[callbackName] = (data) => {
       delete window[callbackName];
       document.body.removeChild(script);
@@ -15,7 +14,6 @@ function pedirJSONP(url) {
       else resolve(data);
     };
 
-    // Inyectamos el script en el DOM
     script.src = `${url}&output=jsonp&callback=${callbackName}`;
     script.onerror = () => {
       delete window[callbackName];
@@ -66,3 +64,27 @@ export async function obtenerTop() {
   }
 }
 
+
+export async function obtenerAlbumesArtista(artistId) {
+  const urlObjetivo = `${URL_BASE}/artist/${artistId}/albums`;
+
+  try {
+    const data = await pedirJSONP(urlObjetivo);
+    return data.data || [];
+  } catch (error) {
+    console.error('Error al obtener álbumes del artista:', error);
+    return [];
+  }
+}
+
+export async function obtenerCancionesAlbum(albumId) {
+  const urlObjetivo = `${URL_BASE}/album/${albumId}/tracks`;
+
+  try {
+    const data = await pedirJSONP(urlObjetivo);
+    return data.data || [];
+  } catch (error) {
+    console.error('Error al obtener canciones del álbum:', error);
+    return [];
+  }
+}

@@ -1,7 +1,6 @@
 import { getFavorites, toggleFavorite } from './favorites.js';
 
 export function renderProfile() {
-    // Buscar si ya existe la superposición
     let overlay = document.getElementById('profile-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
@@ -10,7 +9,7 @@ export function renderProfile() {
         document.body.appendChild(overlay);
     }
 
-    // Dibujar estructura modal
+    // ---- Dibuja estructura modal ----
     updateProfileContent(overlay);
 }
 
@@ -72,7 +71,6 @@ function updateProfileContent(overlay) {
         </div>
     `;
 
-    // Asignar listeners del modal
     document.getElementById('close-profile-btn').addEventListener('click', () => {
         overlay.style.display = 'none';
     });
@@ -83,7 +81,7 @@ function updateProfileContent(overlay) {
         }
     });
 
-    // Lógica para editar nombre
+    // ---- Lógica para editar nombre ----
     const editBtn = document.getElementById('edit-name-btn');
     const saveBtn = document.getElementById('save-name-btn');
     const nameText = document.getElementById('profile-username-text');
@@ -100,10 +98,8 @@ function updateProfileContent(overlay) {
     saveBtn.addEventListener('click', () => {
         const nuevoNombre = nameInput.value.trim();
         if (nuevoNombre && nuevoNombre !== usuarioActual) {
-            // Guardar nombre
             localStorage.setItem('usuario_actual', nuevoNombre);
             
-            // Actualizar credenciales en la lista de usuarios registrados si es necesario
             const usuariosGuardados = JSON.parse(localStorage.getItem('usuarios_registrados') || '{}');
             const password = usuariosGuardados[usuarioActual];
             if (password) {
@@ -112,7 +108,6 @@ function updateProfileContent(overlay) {
                 localStorage.setItem('usuarios_registrados', JSON.stringify(usuariosGuardados));
             }
 
-            // También renombrar la clave de favoritos si se desea migrar favoritos
             const favKeyOld = `favorites_${usuarioActual}`;
             const favKeyNew = `favorites_${nuevoNombre}`;
             const favs = localStorage.getItem(favKeyOld);

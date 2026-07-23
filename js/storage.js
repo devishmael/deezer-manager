@@ -113,4 +113,4 @@ function showNetworkStatusNotification(isOnline) {
 export function getAlbumRating(albumId) {
     const ratings = JSON.parse(localStorage.getItem('album_ratings')) || {};
     return ratings[albumId] || 0;
-}
+}

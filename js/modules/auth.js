@@ -42,7 +42,7 @@ export function initAuth() {
         </div>
     `;
 
-    // Listener del formulario
+    // ---- Listener del formulario ----
     document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -54,13 +54,13 @@ export function initAuth() {
         const errorMsg = document.getElementById('error-msg');
         const loginBtn = document.getElementById('login-btn');
 
-        // ACTIVAR SPINNER 
+        // ---- Spinner ----
         btnText.textContent = "Validando...";
         spinner.classList.remove('hidden');
         loginBtn.disabled = true;
         errorMsg.classList.add('hidden');
 
-        // Simulamos la espera del servidor personal (2 segundos)
+        // ---- Simula espera del servidor ----
         setTimeout(() => {
             const usuariosGuardados = JSON.parse(localStorage.getItem('usuarios_registrados') || '{}');
             const esUsuarioRegistrado = usuariosGuardados[username] && usuariosGuardados[username] === password;
