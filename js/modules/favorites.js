@@ -141,3 +141,59 @@ export function renderFavoritesPanel() {
         });
     });
 }
+
+
+
+
+
+
+
+let myAlbums = JSON.parse(localStorage.getItem('favorites')) || [];
+
+const container = document.getElementById('favorites-section');
+const filterSelect = document.getElementById('rating-filter');
+
+// Función para renderizar los álbumes
+function renderAlbums(filterValue = 'all') {
+    container.innerHTML = ''; // Limpiar contenedor
+
+    const filtered = myAlbums.filter(album => {
+        if (filterValue === 'all') return true;
+        return album.rating == filterValue;
+    });
+
+    if (filtered.length === 0) {
+        container.innerHTML = '<p>No se encontraron álbumes con esta calificación.</p>';
+        return;
+    }
+
+    filtered.forEach(album => {
+        const albumDiv = document.createElement('div');
+        albumDiv.className = 'album-card';
+        albumDiv.innerHTML = `
+            <img src="${album.cover}" alt="${album.title}">
+            <h3>${album.title}</h3>
+            <div class="stars" data-id="${album.id}">
+                ${generateStars(album.rating)}
+            </div>
+        `;
+        container.appendChild(albumDiv);
+    });
+}
+
+// Función para generar el HTML de las 1-5 estrellas
+function generateStars(rating) {
+    let starsHTML = '';
+    for (let i = 1; i <= 5; i++) {
+        starsHTML += `<span class="star ${i <= rating ? 'active' : ''}" onclick="rateAlbum('${i}')">★</span>`;
+    }
+    return starsHTML;
+}
+
+// Evento para el filtrado dinámico
+filterSelect.addEventListener('change', (e) => {
+    renderAlbums(e.target.value);
+});
+
+// Inicializar la vista
+renderAlbums();
